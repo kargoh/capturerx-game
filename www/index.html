@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0' name='viewport' />
+        <link rel="stylesheet" type="text/css" href="css/alertify.css">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
+        <title>Yano Matching Game</title>
+    </head>
+    <body>
+        <div class="content" id="content">
+            <div class="row">
+                <div class="col-sm-6">
+                    <canvas id="gameCanvas" width="600" height="600"></canvas>
+                </div>
+                <div class="col-sm-6 pad-top">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <p>Your Score</p>
+                            <h1 id="currentTime">00.00</h1>
+                            <h3 class="name">Your Best: <span id="your-best">00.00</span></h3>
+                            <div id="retry" class="action-button noselect" onclick="window.Game.retry()">Retry</div>
+                        </div>
+                        <div class="col-xs-6">
+                            <p>Best Score</p>
+                            <h1 id="highScore">00.00</h1>
+                            <h3 id="highScoreName" class="name">Name</h3>
+                            <div id="top-ten" class="action-button noselect" onclick="window.Game.showTopTen()">Top 10</div>
+                        </div>
+                    </div>
+                    <div class="row top-border">
+                        <div class="col-xs-12">
+                            <p style="font-size: 20px !important; line-height: 24px;">Pick a card. Find its match. Do it fast.</p>
+                            <img src="img/game-logo.gif"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/alertify.js"></script>
+        <script src="js/preloadjs-NEXT.min.js"></script>
+        <script src="js/soundjs-NEXT.min.js"></script>
+        <script src="js/easeljs-NEXT.combined.js"></script>
+        <script src="js/tweenjs-NEXT.min.js"></script>
+        <script src="js/firebase.js"></script>
+
+        <!-- Game 'Classes'  -->
+        <script type="text/javascript" src="js/AssetManager.js"></script>
+        <script type="text/javascript" src="js/Cards.js"></script>
+        <script type="text/javascript" src="js/EndGraphics.js"></script>
+        <script type="text/javascript" src="js/Timer.js"></script>
+        <script type="text/javascript" src="js/Game.js"></script>
+        <script>
+            if (window.Game == null){ document.getElementById('content').innerHTML = "<p style='text-align: center; width: 100%;'>We're sorry, but your browser is a bit too old to play this game.</p>"; }
+        </script>
+    </body>
+</html>
