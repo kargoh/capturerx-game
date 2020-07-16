@@ -1,6 +1,6 @@
 # Business Cards
 
-Get the highest score for matching the Yano Creative themed business cards
+Get the highest score for matching the CaptureRX themed business cards
 
 #### Tools:
   - [CreateJS](http://createjs.com/) (Canvas)
