@@ -13,6 +13,7 @@
 .alertify {
   position: fixed;
   background-color: rgba(0, 0, 0, 0.3);
+  overflow-y: scroll;
   left: 0;
   right: 0;
   top: 0;
@@ -33,9 +34,7 @@
   .alertify .dialog, .alertify .alert {
     width: 100%;
     margin: 0 auto;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%); }
+    position: relative; }
     .alertify .dialog > *, .alertify .alert > * {
       width: 400px;
       max-width: 95%;

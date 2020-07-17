@@ -28,6 +28,8 @@
         this.assetManager.preload.on("complete", function(){ Game.prototype.setStage(); });
         this.assetManager.preload.on("progress", function(){ Game.prototype.assetManager.updateLoading(); window.Game.stage.update(); });
 
+        this.scoreLimit = 25;
+
         this.initFirebase();
     }
     Game.prototype.setStage = function() {
@@ -80,23 +82,24 @@
     }
     Game.prototype.checkHighScore = function(newTime){
         //update session best score
+        var scoreLimit = this.scoreLimit;
         var yourBest = parseInt((document.getElementById('your-best').innerHTML).replace(".",""));
-        if ((newTime / 10) < yourBest || yourBest == 0){ //divide by 10 to compare with 4 digits
+        if ((newTime / scoreLimit) < yourBest || yourBest == 0){ //divide by 25 to compare with 4 digits
             document.getElementById('your-best').innerHTML = window.timer.toString(newTime);
         }
 
-        //pull top 10 and check for new high score
-        var ref = this.db.ref('leaderboard');
-        ref.orderByChild('time').limitToFirst(10).once('value', function(snapshot){
+        //pull top 25 and check for new high score
+        var ref = this.db.ref('leaderboard-crx');
+        ref.orderByChild('time').limitToFirst(scoreLimit).once('value', function(snapshot){
             var isTopScore = false;
             var key = null;
-            snapshot.forEach(function(childSnapshot){ //check if within top 10 scores
+            snapshot.forEach(function(childSnapshot){ //check if within top 25 scores
                 if (newTime < parseInt(childSnapshot.val().time)){
                     key = childSnapshot.key;
                     return true; //break loop
                 }
             });
-            if (key != null){ //a key without a value will not make top 10
+            if (key != null){ //a key without a value will not make top 25
                 alertify.defaultValue("name")
                 .okBtn("Submit high score")
                 .cancelBtn("Cancel")
@@ -133,17 +136,18 @@
         }
     }
     Game.prototype.populateDatabase = function(){
-        //insure top 10 exists
-        var ref = this.db.ref('leaderboard');
-        ref.orderByChild('time').limitToFirst(10).once('value', function(snapshot){
-            if (snapshot.numChildren() < 10){
-                ref.push({ "name": "Yano", "time": 99999 });
+        //insure top 25 exists
+        var scoreLimit = this.scoreLimit;
+        var ref = this.db.ref('leaderboard-crx');
+        ref.orderByChild('time').limitToFirst(scoreLimit).once('value', function(snapshot){
+            if (snapshot.numChildren() < scoreLimit){
+                ref.push({ "name": "No Record", "time": 99999 });
                 window.Game.populateDatabase(); //recursion
             }
         });
     }
     Game.prototype.updateHighScoreText = function(){
-        var ref = this.db.ref('leaderboard');
+        var ref = this.db.ref('leaderboard-crx');
         ref.orderByChild('time').limitToFirst(1).once('value', function(snapshot){
             snapshot.forEach(function(childSnapshot){
                 document.getElementById('highScore').innerHTML = window.timer.toString(childSnapshot.val().time);
@@ -153,7 +157,7 @@
     }
     Game.prototype.getBestScore = function(){
         var bestScore = 99999;
-        var ref = this.db.ref('leaderboard');
+        var ref = this.db.ref('leaderboard-crx');
         ref.orderByChild('time').limitToFirst(1).once('value', function(snapshot){
             snapshot.forEach(function(childSnapshot){
                 bestScore = childSnapshot.val().time;
@@ -171,10 +175,11 @@
         }
     }
     Game.prototype.showTopTen = function(){
-        var htmlElem = "<h3>Top 10 Scores</h3>";
+        var scoreLimit = this.scoreLimit;
+        var htmlElem = "<h3>Top" + scoreLimit + "Scores</h3>";
         var rank = 0; //rank
-        var ref = this.db.ref('leaderboard');
-        ref.orderByChild('time').limitToFirst(10).once('value', function(snapshot){
+        var ref = this.db.ref('leaderboard-crx');
+        ref.orderByChild('time').limitToFirst(scoreLimit).once('value', function(snapshot){
             snapshot.forEach(function(childSnapshot){
                 rank++; //increment rank
                 htmlElem += "<div class='row'>"+
